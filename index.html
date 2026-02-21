@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lớp học xanh</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e6f5ec, #ffffff);
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+    header {
+      background: linear-gradient(to right, #4caf50, #81c784);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      animation: fadeInDown 1s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    nav {
+      background: #388e3c;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+    }
+    .menu.show {
+      display: flex;
+    }
+    nav button {
+      background: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 1rem;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+    }
+    .menu a {
+      color: white;
+      text-decoration: none;
+      padding: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    .menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    @media (min-width: 768px) {
+      nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem;
+      }
+      nav button {
+        display: none;
+      }
+      .menu {
+        display: flex !important;
+        flex-direction: row;
+      }
+      .menu a {
+        margin: 0 1rem;
+        padding: 0.75rem 1rem;
+      }
+    }
+    main {
+      padding: 2rem;
+      animation: fadeIn 1.2s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    section {
+      margin-bottom: 2rem;
+      background: #ffffffee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      animation: fadeInUp 1s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      color: #2e7d32;
+    }
+    img.phanloai {
+      max-width: 100%;
+      display: block;
+      margin: 1rem auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #388e3c;
+    }
+    .counter {
+      font-weight: bold;
+      color: #1b5e20;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body onload="updateCounter()">
+  <header>
+    <h1>🌱 Lớp học Xanh - Sống Xanh mỗi ngày</h1>
+    <p>Hành động nhỏ - Ý nghĩa lớn</p>
+  </header>
+
+  <nav>
+    <button onclick="toggleMenu()">☰ Menu</button>
+    <div class="menu" id="dropdownMenu">
+      <a href="#phanloai">♻️ Phân loại rác</a>
+      <a href="#nhua">🚫 Giảm nhựa</a>
+      <a href="#theodoi">📊 Theo dõi</a>
+      <a href="#khaosat">📝 Khảo sát</a>
+      <a href="#gopy">💡 Góp ý</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="phanloai">
+      <h2>Phân loại rác học đường</h2>
+      <p>Hướng dẫn cách phân loại rác: Hữu cơ, vô cơ, tái chế và nguy hại. Hãy cùng nhau bỏ rác đúng nơi quy định nhé!</p>
+      <img class="phanloai" src="https://i.imgur.com/yJc6Vds.png" alt="Sơ đồ phân loại rác">
+      <ul>
+        <li>Rác hữu cơ: vỏ trái cây, thức ăn thừa,...</li>
+        <li>Rác tái chế: chai nhựa, giấy, lon,...</li>
+        <li>Rác vô cơ: vỏ snack, bao bì composite</li>
+        <li>Rác nguy hại: pin, bóng đèn,...</li>
+      </ul>
+    </section>
+
+    <section id="nhua">
+      <h2>Giảm sử dụng nhựa dùng một lần</h2>
+      <p>Hãy sử dụng bình nước cá nhân, ống hút tre và hộp cơm thay vì đồ nhựa một lần!</p>
+      <ul>
+        <li>Không dùng ly nhựa tại căng-tin</li>
+        <li>Dùng túi vải thay cho túi nylon</li>
+        <li>Tự mang hộp khi mua thức ăn mang về</li>
+      </ul>
+    </section>
+
+    <section id="theodoi">
+      <h2>Theo dõi điện & nước lớp học</h2>
+      <p>Dữ liệu theo thời gian thực từ Google Sheets:</p>
+      <iframe width="100%" height="400" frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRJ7nU.../pubchart?oid=1234567890&amp;format=interactive"></iframe>
+    </section>
+
+    <section id="khaosat">
+      <h2>Khảo sát nhanh</h2>
+      <p>Hôm nay bạn đã mang bình nước cá nhân chưa?</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd.../viewform?embedded=true" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Đang tải…</iframe>
+    </section>
+
+    <section id="gopy">
+      <h2>Góp ý sáng kiến xanh</h2>
+      <p>Bạn có ý tưởng bảo vệ môi trường nào muốn chia sẻ? Gửi ngay tại đây!</p>
+      <form onsubmit="countIdeas(); return false;">
+        <label for="name">Tên bạn:</label>
+        <input type="text" id="name" name="name">
+        <label for="idea">Ý tưởng:</label>
+        <textarea id="idea" name="idea" rows="5"></textarea>
+        <input type="submit" value="Gửi ý tưởng">
+      </form>
+      <p class="counter">Số ý tưởng đã gửi: <span id="ideaCount">0</span></p>
+    </section>
+
+    <section>
+      <h2>📈 Số lượt truy cập</h2>
+      <p class="counter">Bạn là lượt truy cập số: <span id="visitCounter">...</span></p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Lớp học Xanh | Thiết kế bởi học sinh trường THCS Phạm Ngọc Thạch "NVL"!
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("dropdownMenu");
+      menu.classList.toggle("show");
+    }
+
+    function updateCounter() {
+      if (localStorage.pageVisits) {
+        localStorage.pageVisits = Number(localStorage.pageVisits) + 1;
+      } else {
+        localStorage.pageVisits = 1;
+      }
+      document.getElementById("visitCounter").innerText = localStorage.pageVisits;
+    }
+
+    function countIdeas() {
+      if (localStorage.ideasSubmitted) {
+        localStorage.ideasSubmitted = Number(localStorage.ideasSubmitted) + 1;
+      } else {
+        localStorage.ideasSubmitted = 1;
+      }
+      document.getElementById("ideaCount").innerText = localStorage.ideasSubmitted;
+      alert("Cảm ơn bạn đã gửi ý tưởng!");
+      document.getElementById("name").value = "";
+      document.getElementById("idea").value = "";
+    }
+
+    // Hiển thị giá trị ban đầu nếu có
+    window.onload = function() {
+      updateCounter();
+      if (localStorage.ideasSubmitted) {
+        document.getElementById("ideaCount").innerText = localStorage.ideasSubmitted;
+      }
+    }
+  </script>
+</body>
+</html>
