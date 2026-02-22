@@ -2,6 +2,8 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const fetch = require("node-fetch");
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
@@ -9,6 +11,59 @@ app.use(cors());
 
 const db = new sqlite3.Database("./data.db");
 
+/* ================= GEMINI API ================= */
+
+app.post("/ask", async (req, res) => {
+    try {
+        const userMessage = req.body.message;
+
+        if (!userMessage) {
+            return res.status(400).json({ reply: "Bạn chưa nhập nội dung." });
+        }
+
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [
+                                {
+                                    text: `Bạn là Trợ lý Lớp Học Xanh chuyên về môi trường.
+                                    Trả lời ngắn gọn, thân thiện.
+
+                                    Câu hỏi: ${userMessage}`
+                                }
+                            ]
+                        }
+                    ]
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Gemini API error:", data);
+            return res.status(500).json({ reply: "AI đang bận 😢" });
+        }
+
+        const reply =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "AI chưa trả lời được 😅";
+
+            res.json({ reply });
+
+    } catch (err) {
+        console.error("Server error:", err);
+        res.status(500).json({ reply: "Lỗi server 😢" });
+    }
+});
+
+/* ================= DATABASE ================= */
 
 db.run(`
 CREATE TABLE IF NOT EXISTS visitors (
@@ -35,17 +90,17 @@ CREATE TABLE IF NOT EXISTS users (
 )
 `);
 
+/* ================= VISIT ================= */
 
 app.post("/visit", (req, res) => {
 
     let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-    // Chuẩn hóa IP local
     if (ip === '::1') ip = '127.0.0.1';
     if (ip.startsWith('::ffff:')) ip = ip.replace('::ffff:', '');
+
     const time = new Date().toISOString();
 
-    // Kiểm tra IP đã tồn tại chưa
     db.get("SELECT * FROM visitors WHERE ip = ?", [ip], (err, row) => {
 
         if (row) {
@@ -56,7 +111,7 @@ app.post("/visit", (req, res) => {
             "INSERT INTO visitors (ip, time) VALUES (?, ?)",
                [ip, time],
                (err) => {
-                   if (err) {s
+                   if (err) {
                        return res.status(500).json({ error: "Lỗi lưu IP" });
                    }
                    res.json({ message: "Lượt truy cập mới" });
@@ -65,16 +120,18 @@ app.post("/visit", (req, res) => {
     });
 });
 
+/* ================= COUNT ================= */
+
 app.get("/count", (req, res) => {
     db.get("SELECT COUNT(*) as total FROM visitors", (err, row) => {
         res.json(row);
     });
 });
 
+/* ================= IDEAS ================= */
 
 app.post("/add-idea", (req, res) => {
     const { name, idea } = req.body;
-
     const date = new Date().toLocaleDateString();
 
     db.run(
@@ -95,6 +152,10 @@ app.get("/ideas", (req, res) => {
     });
 });
 
+/* ================= START SERVER ================= */
+
 app.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+    console.log("Server chạy tại http://localhost:3000");
 });
+console.log("KEY:", process.env.GEMINI_API_KEY);
+
