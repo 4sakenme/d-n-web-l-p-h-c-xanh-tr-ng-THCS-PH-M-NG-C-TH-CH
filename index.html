@@ -409,19 +409,22 @@ async function countVisit() {
 }
 
 /* =========================
-   LOAD SỐ LIỆU (FETCH THƯỜNG)
+   LOAD SỐ LIỆU (JSONP FIX CORS)
 ========================= */
-async function loadStats() {
-    try {
-        const res = await fetch(API_URL + "?type=stats");
-        const data = await res.json();
+function handleStats(data) {
+    document.getElementById("visitCounter").innerText = data.visits || 0;
+    document.getElementById("ideaCount").innerText = data.ideas || 0;
+}
 
-        document.getElementById("visitCounter").innerText = data.visits || 0;
-        document.getElementById("ideaCount").innerText = data.ideas || 0;
+function loadStats() {
+    const oldScript = document.getElementById("statsScript");
+    if (oldScript) oldScript.remove();
 
-    } catch (err) {
-        console.error("Lỗi load stats:", err);
-    }
+    const script = document.createElement("script");
+    script.id = "statsScript";
+    script.src = `${API_URL}?type=stats&callback=handleStats`;
+
+    document.body.appendChild(script);
 }
 
 /* =========================
@@ -456,7 +459,12 @@ function loadTheme() {
 ========================= */
 window.addEventListener("load", async () => {
     loadTheme();
-    await countVisit();
+
+    if (!localStorage.getItem("visited")) {
+        await countVisit();
+        localStorage.setItem("visited", "true");
+    }
+
     setTimeout(loadStats, 1000);
 });
 </script>
