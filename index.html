@@ -4,7 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lớp học xanh</title>
+    <section>
+  <h2>🔐 Đăng nhập</h2>
+  <button id="googleLogin">Đăng nhập với Google</button>
+  <button id="logoutBtn" style="display:none;">Đăng xuất</button>
+  <p id="userInfo"></p>
+</section>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+ const firebaseConfig = {
+
+    apiKey: "AIzaSyDL7iuqYz_eQwUtRng3NWwKj-o1Qd0qFP8",
+
+    authDomain: "lop-hoc-xanh.firebaseapp.com",
+
+    projectId: "lop-hoc-xanh",
+
+    storageBucket: "lop-hoc-xanh.firebasestorage.app",
+
+    messagingSenderId: "218191983909",
+
+    appId: "1:218191983909:web:8242e90647f301e141d6cc",
+
+    measurementId: "G-Z45E05P0B9"
+
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginBtn = document.getElementById("googleLogin");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const userInfo = document.getElementById("userInfo");
+
+  loginBtn.onclick = async () => {
+    await signInWithPopup(auth, provider);
+  };
+
+  logoutBtn.onclick = async () => {
+    await signOut(auth);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+userInfo.innerHTML = `
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="${user.photoURL}"
+         width="45"
+         style="border-radius:50%;box-shadow:0 0 5px rgba(0,0,0,0.3)">
+    <div>
+      <strong>${user.displayName}</strong><br>
+      <small>${user.email}</small>
+    </div>
+  </div>
+`;
+      loginBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+    } else {
+      userInfo.innerHTML = "";
+      loginBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+    }
+  });
+</script>
     <button id="themeToggle" onclick="toggleDarkMode()">
         <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/581/581601.png" alt="theme icon">
     </button>
@@ -468,5 +540,6 @@ window.addEventListener("load", async () => {
     setTimeout(loadStats, 1000);
 });
 </script>
+<script src="script.js"></script>
 </body>
 </html>
