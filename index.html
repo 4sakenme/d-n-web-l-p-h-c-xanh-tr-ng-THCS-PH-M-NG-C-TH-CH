@@ -161,6 +161,7 @@
             margin-top: 1rem;
         }
 
+
         /* DARK MODE STYLE */
         #themeToggle {
             position: fixed;
@@ -195,7 +196,7 @@
         }
 
         body.dark section {
-            background: #1f1f1f;
+            background: #2a2a2a;
             color: #f1f1f1;
         }
 
@@ -214,6 +215,39 @@
         body.dark #themeToggle {
             background: #333;
         }
+        body.dark .chat-box {
+  background: #1e1e1e;
+}
+
+body.dark .chat-box p {
+  color: #ffffff;
+}
+        .chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.chat-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+}
+
+.chat-input button {
+  padding: 8px 15px;
+  cursor: pointer;
+}.chat-box p {
+  margin: 5px 0;
+  color: #000;   /* ép chữ đen trong nền sáng */
+}
     </style>
 </head>
 
@@ -301,6 +335,18 @@
             <h2>📈 Số lượt truy cập</h2>
             <p class="counter">Bạn là lượt truy cập số: <span id="visitCounter">...</span></p>
         </section>
+        <section id="ai">
+<section id="ai">
+  <h2>🤖 Trợ lý Lớp Học Xanh</h2>
+
+  <div id="chatBox" class="chat-box"></div>
+
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Hỏi mình về môi trường..." />
+    <button onclick="sendMessage()">Gửi</button>
+  </div>
+</section>
+</section>
     </main>
 
     <footer>
@@ -395,5 +441,6 @@
             loadVisits();
         };
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
