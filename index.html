@@ -1,247 +1,401 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lớp học xanh</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e6f5ec, #ffffff);
-      margin: 0;
-      padding: 0;
-      scroll-behavior: smooth;
-    }
-    header {
-      background: linear-gradient(to right, #4caf50, #81c784);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-      animation: fadeInDown 1s ease;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    nav {
-      background: #388e3c;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .menu {
-      display: none;
-      flex-direction: column;
-    }
-    .menu.show {
-      display: flex;
-    }
-    nav button {
-      background: none;
-      color: white;
-      font-size: 1.2rem;
-      padding: 1rem;
-      width: 100%;
-      border: none;
-      cursor: pointer;
-    }
-    .menu a {
-      color: white;
-      text-decoration: none;
-      padding: 1rem;
-      border-top: 1px solid rgba(255,255,255,0.2);
-    }
-    .menu a:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    @media (min-width: 768px) {
-      nav {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0.5rem;
-      }
-      nav button {
-        display: none;
-      }
-      .menu {
-        display: flex !important;
-        flex-direction: row;
-      }
-      .menu a {
-        margin: 0 1rem;
-        padding: 0.75rem 1rem;
-      }
-    }
-    main {
-      padding: 2rem;
-      animation: fadeIn 1.2s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    section {
-      margin-bottom: 2rem;
-      background: #ffffffee;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      animation: fadeInUp 1s ease;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h2 {
-      color: #2e7d32;
-    }
-    img.phanloai {
-      max-width: 100%;
-      display: block;
-      margin: 1rem auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    footer {
-      background: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    input[type="submit"]:hover {
-      background-color: #388e3c;
-    }
-    .counter {
-      font-weight: bold;
-      color: #1b5e20;
-      text-align: center;
-      margin-top: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp học xanh</title>
+
+    <button id="themeToggle" onclick="toggleDarkMode()">
+        <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/581/581601.png" alt="theme icon">
+    </button>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e6f5ec, #ffffff);
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            transition: background 0.3s ease;
+        }
+
+        header {
+            background: linear-gradient(to right, #4caf50, #81c784);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        nav {
+            background: #388e3c;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .menu {
+            display: none;
+            flex-direction: column;
+        }
+
+        .menu.show {
+            display: flex;
+        }
+
+        nav button {
+            background: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 1rem;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            nav {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5rem;
+            }
+            nav button {
+                display: none;
+            }
+            .menu {
+                display: flex !important;
+                flex-direction: row;
+            }
+            .menu a {
+                margin: 0 1rem;
+                padding: 0.75rem 1rem;
+                border-top: none;
+            }
+        }
+
+        main {
+            padding: 2rem;
+            animation: fadeIn 1.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        section {
+            margin-bottom: 2rem;
+            background: #ffffffee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #2e7d32;
+        }
+
+        img.phanloai {
+            max-width: 100%;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.6rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Đảm bảo padding không làm tràn khung */
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #388e3c;
+        }
+
+        .counter {
+            font-weight: bold;
+            color: #1b5e20;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* DARK MODE STYLE */
+        #themeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 2000;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.1);
+        }
+
+        #themeToggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        body.dark {
+            background: linear-gradient(to right, #1e1e1e, #121212);
+            color: #f1f1f1;
+        }
+
+        body.dark section {
+            background: #1f1f1f;
+            color: #f1f1f1;
+        }
+
+        body.dark h2 {
+            color: #81c784;
+        }
+
+        body.dark header {
+            background: linear-gradient(to right, #2e7d32, #1b5e20);
+        }
+
+        body.dark footer {
+            background: #1b5e20;
+        }
+
+        body.dark #themeToggle {
+            background: #333;
+        }
+    </style>
 </head>
-<body onload="updateCounter()">
-  <header>
-    <h1>🌱 Lớp học Xanh - Sống Xanh mỗi ngày</h1>
-    <p>Hành động nhỏ - Ý nghĩa lớn</p>
-  </header>
 
-  <nav>
-    <button onclick="toggleMenu()">☰ Menu</button>
-    <div class="menu" id="dropdownMenu">
-      <a href="#phanloai">♻️ Phân loại rác</a>
-      <a href="#nhua">🚫 Giảm nhựa</a>
-      <a href="#theodoi">📊 Theo dõi</a>
-      <a href="#khaosat">📝 Khảo sát</a>
-      <a href="#gopy">💡 Góp ý</a>
-    </div>
-  </nav>
+<body>
 
-  <main>
-    <section id="phanloai">
-      <h2>Phân loại rác học đường</h2>
-      <p>Hướng dẫn cách phân loại rác: Hữu cơ, vô cơ, tái chế và nguy hại. Hãy cùng nhau bỏ rác đúng nơi quy định nhé!</p>
-      <img class="phanloai" src="https://i.imgur.com/yJc6Vds.png" alt="Sơ đồ phân loại rác">
-      <ul>
-        <li>Rác hữu cơ: vỏ trái cây, thức ăn thừa,...</li>
-        <li>Rác tái chế: chai nhựa, giấy, lon,...</li>
-        <li>Rác vô cơ: vỏ snack, bao bì composite</li>
-        <li>Rác nguy hại: pin, bóng đèn,...</li>
-      </ul>
-    </section>
+    <header>
+        <h1>🌱 Lớp học Xanh - Sống Xanh mỗi ngày</h1>
+        <p>Hành động nhỏ - Ý nghĩa lớn</p>
+    </header>
 
-    <section id="nhua">
-      <h2>Giảm sử dụng nhựa dùng một lần</h2>
-      <p>Hãy sử dụng bình nước cá nhân, ống hút tre và hộp cơm thay vì đồ nhựa một lần!</p>
-      <ul>
-        <li>Không dùng ly nhựa tại căng-tin</li>
-        <li>Dùng túi vải thay cho túi nylon</li>
-        <li>Tự mang hộp khi mua thức ăn mang về</li>
-      </ul>
-    </section>
+    <nav>
+        <button onclick="toggleMenu()">☰ Menu</button>
+        <div class="menu" id="dropdownMenu">
+            <a href="#phanloai">♻️ Phân loại rác</a>
+            <a href="#nhua">🚫 Giảm nhựa</a>
+            <a href="#theodoi">📊 Theo dõi</a>
+            <a href="#khaosat">📝 Khảo sát</a>
+            <a href="#gopy">💡 Góp ý</a>
+        </div>
+    </nav>
 
-    <section id="theodoi">
-      <h2>Theo dõi điện & nước lớp học</h2>
-      <p>Dữ liệu theo thời gian thực từ Google Sheets:</p>
-      <iframe width="100%" height="400" frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRJ7nU.../pubchart?oid=1234567890&amp;format=interactive"></iframe>
-    </section>
+    <main>
+        <section id="phanloai">
+            <h2>Phân loại rác học đường</h2>
+            <p>Hướng dẫn cách phân loại rác: Hữu cơ, vô cơ, tái chế và nguy hại. Hãy cùng nhau bỏ rác đúng nơi quy định nhé!</p>
+            <img class="phanloai" src="https://i.imgur.com/yJc6Vds.png" alt="Sơ đồ phân loại rác">
+            <ul>
+                <li><strong>Rác hữu cơ:</strong> vỏ trái cây, thức ăn thừa,...</li>
+                <li><strong>Rác tái chế:</strong> chai nhựa, giấy, lon,...</li>
+                <li><strong>Rác vô cơ:</strong> vỏ snack, bao bì composite</li>
+                <li><strong>Rác nguy hại:</strong> pin, bóng đèn,...</li>
+            </ul>
+        </section>
 
-    <section id="khaosat">
-      <h2>Khảo sát nhanh</h2>
-      <p>Hôm nay bạn đã mang bình nước cá nhân chưa?</p>
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd.../viewform?embedded=true" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Đang tải…</iframe>
-    </section>
+        <section id="nhua">
+            <h2>Giảm sử dụng nhựa dùng một lần</h2>
+            <p>Hãy sử dụng bình nước cá nhân, ống hút tre và hộp cơm thay vì đồ nhựa một lần!</p>
+            <ul>
+                <li>Không dùng ly nhựa tại căng-tin</li>
+                <li>Dùng túi vải thay cho túi nylon</li>
+                <li>Tự mang hộp khi mua thức ăn mang về</li>
+            </ul>
+        </section>
 
-    <section id="gopy">
-      <h2>Góp ý sáng kiến xanh</h2>
-      <p>Bạn có ý tưởng bảo vệ môi trường nào muốn chia sẻ? Gửi ngay tại đây!</p>
-      <form onsubmit="countIdeas(); return false;">
-        <label for="name">Tên bạn:</label>
-        <input type="text" id="name" name="name">
-        <label for="idea">Ý tưởng:</label>
-        <textarea id="idea" name="idea" rows="5"></textarea>
-        <input type="submit" value="Gửi ý tưởng">
-      </form>
-      <p class="counter">Số ý tưởng đã gửi: <span id="ideaCount">0</span></p>
-    </section>
+        <section id="theodoi">
+            <h2>Theo dõi điện & nước lớp học</h2>
+            <p>Dữ liệu theo thời gian thực từ Google Sheets:</p>
+            <iframe width="100%" height="400" frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRJ7nU.../pubchart?oid=1234567890&amp;format=interactive"></iframe>
+        </section>
 
-    <section>
-      <h2>📈 Số lượt truy cập</h2>
-      <p class="counter">Bạn là lượt truy cập số: <span id="visitCounter">...</span></p>
-    </section>
-  </main>
+        <section id="khaosat">
+            <h2>Khảo sát nhanh</h2>
+            <p>Hôm nay bạn đã mang bình nước cá nhân chưa?</p>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd.../viewform?embedded=true" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Đang tải…</iframe>
+        </section>
 
-  <footer>
-    &copy; 2025 Lớp học Xanh | Thiết kế bởi học sinh trường THCS Phạm Ngọc Thạch "NVL"!
-  </footer>
+        <section id="gopy">
+            <h2>Góp ý sáng kiến xanh</h2>
+            <p>Bạn có ý tưởng bảo vệ môi trường nào muốn chia sẻ? Gửi ngay tại đây!</p>
+            <form onsubmit="submitIdea(event)">
+                <label for="name">Tên bạn:</label>
+                <input type="text" id="name" name="name" required>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("dropdownMenu");
-      menu.classList.toggle("show");
-    }
+                <label for="idea">Ý tưởng:</label>
+                <textarea id="idea" name="idea" rows="5" required></textarea>
 
-    function updateCounter() {
-      if (localStorage.pageVisits) {
-        localStorage.pageVisits = Number(localStorage.pageVisits) + 1;
-      } else {
-        localStorage.pageVisits = 1;
-      }
-      document.getElementById("visitCounter").innerText = localStorage.pageVisits;
-    }
+                <input type="submit" value="Gửi ý tưởng">
+            </form>
+            <p class="counter">Số ý tưởng đã gửi: <span id="ideaCount">0</span></p>
 
-    function countIdeas() {
-      if (localStorage.ideasSubmitted) {
-        localStorage.ideasSubmitted = Number(localStorage.ideasSubmitted) + 1;
-      } else {
-        localStorage.ideasSubmitted = 1;
-      }
-      document.getElementById("ideaCount").innerText = localStorage.ideasSubmitted;
-      alert("Cảm ơn bạn đã gửi ý tưởng!");
-      document.getElementById("name").value = "";
-      document.getElementById("idea").value = "";
-    }
+            <h3>📋 Danh sách ý tưởng</h3>
+            <table border="1" width="100%" style="border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background-color: #f2f2f2; color: #333;">
+                        <th style="padding: 8px;">Ngày</th>
+                        <th style="padding: 8px;">Tên</th>
+                        <th style="padding: 8px;">Ý tưởng</th>
+                    </tr>
+                </thead>
+                <tbody id="ideaTable"></tbody>
+            </table>
+        </section>
 
-    // Hiển thị giá trị ban đầu nếu có
-    window.onload = function() {
-      updateCounter();
-      if (localStorage.ideasSubmitted) {
-        document.getElementById("ideaCount").innerText = localStorage.ideasSubmitted;
-      }
-    }
-  </script>
+        <section>
+            <h2>📈 Số lượt truy cập</h2>
+            <p class="counter">Bạn là lượt truy cập số: <span id="visitCounter">...</span></p>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2025 Lớp học Xanh | Thiết kế bởi học sinh trường THCS Phạm Ngọc Thạch "NVL"!
+    </footer>
+
+    <script>
+        // 1. Menu Mobile
+        function toggleMenu() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.classList.toggle("show");
+        }
+
+        // 2. Gửi ý tưởng lên Google Sheets (Apps Script)
+        function submitIdea(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value.trim();
+            const idea = document.getElementById("idea").value.trim();
+
+            if (!name || !idea) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Gửi dữ liệu qua fetch (Apps Script URL)
+            fetch("https://script.google.com/macros/s/AKfycbwK9XJla753sg-exOWPkaD9531i-utEi-b6hUuFKAnyScsmVcSIWjwLvOzDdYviYcrY-A/exec", {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name, idea: idea })
+            });
+
+            alert("Gửi thành công!");
+            document.getElementById("name").value = "";
+            document.getElementById("idea").value = "";
+            increaseIdeaCount();
+        }
+
+        // 3. Đếm số ý tưởng (Lưu LocalStorage)
+        function increaseIdeaCount() {
+            let count = parseInt(localStorage.getItem("ideaCount") || 0);
+            count++;
+            localStorage.setItem("ideaCount", count);
+            document.getElementById("ideaCount").innerText = count;
+        }
+
+        function loadIdeaCount() {
+            let count = localStorage.getItem("ideaCount") || 0;
+            document.getElementById("ideaCount").innerText = count;
+        }
+
+        // 4. Lượt truy cập (Lưu LocalStorage theo ngày)
+        function loadVisits() {
+            let visits = parseInt(localStorage.getItem("visits") || 0);
+            let today = new Date().toDateString();
+            let lastVisit = localStorage.getItem("lastVisit");
+
+            if (lastVisit !== today) {
+                visits++;
+                localStorage.setItem("visits", visits);
+                localStorage.setItem("lastVisit", today);
+            }
+            document.getElementById("visitCounter").innerText = visits;
+        }
+
+        // 5. Dark Mode logic
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById("themeIcon");
+            body.classList.toggle("dark");
+
+            if (body.classList.contains("dark")) {
+                icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png"; // Icon mặt trời
+                localStorage.setItem("theme", "dark");
+            } else {
+                icon.src = "https://cdn-icons-png.flaticon.com/512/581/581601.png"; // Icon mặt trăng
+                localStorage.setItem("theme", "light");
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem("theme");
+            const icon = document.getElementById("themeIcon");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark");
+                icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+            }
+        }
+
+        // Khởi tạo khi trang load
+        window.onload = function() {
+            loadTheme();
+            loadIdeaCount();
+            loadVisits();
+        };
+    </script>
 </body>
 </html>
