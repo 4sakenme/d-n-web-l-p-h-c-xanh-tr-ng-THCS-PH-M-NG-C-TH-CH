@@ -1,6 +1,7 @@
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
+const path = require("path"); // Thư viện để xử lý đường dẫn
 const fetch = require("node-fetch");
 require("dotenv").config();
 
@@ -10,7 +11,16 @@ app.use(express.json());
 app.use(cors());
 app.set("trust proxy", true); // QUAN TRỌNG khi deploy
 
-const db = new sqlite3.Database("./data.db");
+
+// 1. CHỈ ĐỊNH ĐƯỜNG DẪN DATABASE
+const dbPath = path.resolve(__dirname, "data.db");
+const db = new sqlite3.Database(dbPath);
+
+app.use(express.static(path.join(__dirname, "..")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "index.html"));
+});
 
 /* ================= GEMINI API ================= */
 
@@ -87,6 +97,7 @@ db.serialize(() => {
         date TEXT
     )
     `);
+
 
 });
 
