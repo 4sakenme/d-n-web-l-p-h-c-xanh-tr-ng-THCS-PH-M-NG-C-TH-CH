@@ -8,11 +8,7 @@ app.use(cors());
 
 const db = new sqlite3.Database("./data.db");
 
-// =====================
-// TẠO BẢNG
-// =====================
 
-// Thêm cột ip
 db.run(`
 CREATE TABLE IF NOT EXISTS visitors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,9 +26,6 @@ CREATE TABLE IF NOT EXISTS ideas (
 )
 `);
 
-// =====================
-// API LƯỢT TRUY CẬP
-// =====================
 
 app.post("/visit", (req, res) => {
 
@@ -69,9 +62,6 @@ app.get("/count", (req, res) => {
     });
 });
 
-// =====================
-// API Ý TƯỞNG
-// =====================
 
 app.post("/add-idea", (req, res) => {
     const { name, idea } = req.body;

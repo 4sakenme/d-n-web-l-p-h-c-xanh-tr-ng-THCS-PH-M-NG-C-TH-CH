@@ -325,7 +325,6 @@
                 return;
             }
 
-            // Gửi dữ liệu qua fetch (Apps Script URL)
             fetch("https://script.google.com/macros/s/AKfycbwK9XJla753sg-exOWPkaD9531i-utEi-b6hUuFKAnyScsmVcSIWjwLvOzDdYviYcrY-A/exec", {
                 method: "POST",
                 mode: "no-cors",
@@ -390,7 +389,6 @@
             }
         }
 
-        // Khởi tạo khi trang load
         window.onload = function() {
             loadTheme();
             loadIdeaCount();
