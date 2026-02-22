@@ -353,7 +353,7 @@ body.dark .chat-box p {
     </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzIeA-1MEkK3r-8hiiikg9NCoiSwg2r6sMMJUdjNagRLCS_3FLFJzWSQ-qaJnlZ05dZvQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzkRet7cKrKXjFJ7SPv4lUgbVC7hl8WyveEtYGkGKVDPwt3lvBCRfEss9qAaXg3IquajQ/exec";
 
 /* =========================
    MENU
@@ -363,7 +363,7 @@ function toggleMenu() {
 }
 
 /* =========================
-   GỬI Ý TƯỞNG (DÙNG GET)
+   GỬI Ý TƯỞNG (NO-CORS)
 ========================= */
 async function submitIdea(event) {
     event.preventDefault();
@@ -378,14 +378,15 @@ async function submitIdea(event) {
 
     try {
         await fetch(
-            `${API_URL}?type=idea&name=${encodeURIComponent(name)}&idea=${encodeURIComponent(idea)}`
+            `${API_URL}?type=idea&name=${encodeURIComponent(name)}&idea=${encodeURIComponent(idea)}`,
+            { method: "GET", mode: "no-cors" }
         );
 
         alert("Gửi thành công!");
         document.getElementById("name").value = "";
         document.getElementById("idea").value = "";
 
-        await loadStats();
+        setTimeout(loadStats, 1000);
 
     } catch (err) {
         console.error("Lỗi gửi ý tưởng:", err);
@@ -394,22 +395,25 @@ async function submitIdea(event) {
 }
 
 /* =========================
-   ĐẾM VISIT (DÙNG GET)
+   ĐẾM VISIT (NO-CORS)
 ========================= */
 async function countVisit() {
     try {
-        await fetch(`${API_URL}?type=visit`);
+        await fetch(`${API_URL}?type=visit`, {
+            method: "GET",
+            mode: "no-cors"
+        });
     } catch (err) {
         console.error("Lỗi đếm visit:", err);
     }
 }
 
 /* =========================
-   LOAD SỐ LIỆU
+   LOAD SỐ LIỆU (FETCH THƯỜNG)
 ========================= */
 async function loadStats() {
     try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL + "?type=stats");
         const data = await res.json();
 
         document.getElementById("visitCounter").innerText = data.visits || 0;
@@ -453,7 +457,7 @@ function loadTheme() {
 window.addEventListener("load", async () => {
     loadTheme();
     await countVisit();
-    await loadStats();
+    setTimeout(loadStats, 1000);
 });
 </script>
 </body>
