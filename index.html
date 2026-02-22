@@ -363,7 +363,7 @@ function toggleMenu() {
 }
 
 /* =========================
-   GỬI Ý TƯỞNG (KHÔNG JSON)
+   GỬI Ý TƯỞNG (DÙNG GET)
 ========================= */
 async function submitIdea(event) {
     event.preventDefault();
@@ -377,14 +377,9 @@ async function submitIdea(event) {
     }
 
     try {
-        await fetch(API_URL, {
-            method: "POST",
-            body: new URLSearchParams({
-                type: "idea",
-                name: name,
-                idea: idea
-            })
-        });
+        await fetch(
+            `${API_URL}?type=idea&name=${encodeURIComponent(name)}&idea=${encodeURIComponent(idea)}`
+        );
 
         alert("Gửi thành công!");
         document.getElementById("name").value = "";
@@ -399,16 +394,11 @@ async function submitIdea(event) {
 }
 
 /* =========================
-   ĐẾM VISIT (KHÔNG JSON)
+   ĐẾM VISIT (DÙNG GET)
 ========================= */
 async function countVisit() {
     try {
-        await fetch(API_URL, {
-            method: "POST",
-            body: new URLSearchParams({
-                type: "visit"
-            })
-        });
+        await fetch(`${API_URL}?type=visit`);
     } catch (err) {
         console.error("Lỗi đếm visit:", err);
     }
