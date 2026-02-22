@@ -336,7 +336,6 @@ body.dark .chat-box p {
             <p class="counter">Bạn là lượt truy cập số: <span id="visitCounter">...</span></p>
         </section>
         <section id="ai">
-<section id="ai">
   <h2>🤖 Trợ lý Lớp Học Xanh</h2>
 
   <div id="chatBox" class="chat-box"></div>
@@ -353,94 +352,119 @@ body.dark .chat-box p {
         &copy; 2025 Lớp học Xanh | Thiết kế bởi học sinh trường THCS Phạm Ngọc Thạch "NVL"!
     </footer>
 
-    <script>
-        // 1. Menu Mobile
-        function toggleMenu() {
-            const menu = document.getElementById("dropdownMenu");
-            menu.classList.toggle("show");
-        }
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzIeA-1MEkK3r-8hiiikg9NCoiSwg2r6sMMJUdjNagRLCS_3FLFJzWSQ-qaJnlZ05dZvQ/exec";
 
-        // 2. Gửi ý tưởng lên Google Sheets (Apps Script)
-        function submitIdea(event) {
-            event.preventDefault();
-            const name = document.getElementById("name").value.trim();
-            const idea = document.getElementById("idea").value.trim();
+/* =========================
+   MENU
+========================= */
+function toggleMenu() {
+    document.getElementById("dropdownMenu").classList.toggle("show");
+}
 
-            if (!name || !idea) {
-                alert("Vui lòng nhập đầy đủ thông tin!");
-                return;
-            }
+/* =========================
+   GỬI Ý TƯỞNG (KHÔNG JSON)
+========================= */
+async function submitIdea(event) {
+    event.preventDefault();
 
-            fetch("https://script.google.com/macros/s/AKfycbwK9XJla753sg-exOWPkaD9531i-utEi-b6hUuFKAnyScsmVcSIWjwLvOzDdYviYcrY-A/exec", {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, idea: idea })
-            });
+    const name = document.getElementById("name").value.trim();
+    const idea = document.getElementById("idea").value.trim();
 
-            alert("Gửi thành công!");
-            document.getElementById("name").value = "";
-            document.getElementById("idea").value = "";
-            increaseIdeaCount();
-        }
+    if (!name || !idea) {
+        alert("Vui lòng nhập đầy đủ!");
+        return;
+    }
 
-        // 3. Đếm số ý tưởng (Lưu LocalStorage)
-        function increaseIdeaCount() {
-            let count = parseInt(localStorage.getItem("ideaCount") || 0);
-            count++;
-            localStorage.setItem("ideaCount", count);
-            document.getElementById("ideaCount").innerText = count;
-        }
+    try {
+        await fetch(API_URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                type: "idea",
+                name: name,
+                idea: idea
+            })
+        });
 
-        function loadIdeaCount() {
-            let count = localStorage.getItem("ideaCount") || 0;
-            document.getElementById("ideaCount").innerText = count;
-        }
+        alert("Gửi thành công!");
+        document.getElementById("name").value = "";
+        document.getElementById("idea").value = "";
 
-        // 4. Lượt truy cập (Lưu LocalStorage theo ngày)
-        function loadVisits() {
-            let visits = parseInt(localStorage.getItem("visits") || 0);
-            let today = new Date().toDateString();
-            let lastVisit = localStorage.getItem("lastVisit");
+        await loadStats();
 
-            if (lastVisit !== today) {
-                visits++;
-                localStorage.setItem("visits", visits);
-                localStorage.setItem("lastVisit", today);
-            }
-            document.getElementById("visitCounter").innerText = visits;
-        }
+    } catch (err) {
+        console.error("Lỗi gửi ý tưởng:", err);
+        alert("Có lỗi xảy ra!");
+    }
+}
 
-        // 5. Dark Mode logic
-        function toggleDarkMode() {
-            const body = document.body;
-            const icon = document.getElementById("themeIcon");
-            body.classList.toggle("dark");
+/* =========================
+   ĐẾM VISIT (KHÔNG JSON)
+========================= */
+async function countVisit() {
+    try {
+        await fetch(API_URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                type: "visit"
+            })
+        });
+    } catch (err) {
+        console.error("Lỗi đếm visit:", err);
+    }
+}
 
-            if (body.classList.contains("dark")) {
-                icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png"; // Icon mặt trời
-                localStorage.setItem("theme", "dark");
-            } else {
-                icon.src = "https://cdn-icons-png.flaticon.com/512/581/581601.png"; // Icon mặt trăng
-                localStorage.setItem("theme", "light");
-            }
-        }
+/* =========================
+   LOAD SỐ LIỆU
+========================= */
+async function loadStats() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-        function loadTheme() {
-            const savedTheme = localStorage.getItem("theme");
-            const icon = document.getElementById("themeIcon");
-            if (savedTheme === "dark") {
-                document.body.classList.add("dark");
-                icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png";
-            }
-        }
+        document.getElementById("visitCounter").innerText = data.visits || 0;
+        document.getElementById("ideaCount").innerText = data.ideas || 0;
 
-        window.onload = function() {
-            loadTheme();
-            loadIdeaCount();
-            loadVisits();
-        };
-    </script>
-    <script src="script.js"></script>
+    } catch (err) {
+        console.error("Lỗi load stats:", err);
+    }
+}
+
+/* =========================
+   DARK MODE
+========================= */
+function toggleDarkMode() {
+    const body = document.body;
+    const icon = document.getElementById("themeIcon");
+    body.classList.toggle("dark");
+
+    if (body.classList.contains("dark")) {
+        icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+        localStorage.setItem("theme", "dark");
+    } else {
+        icon.src = "https://cdn-icons-png.flaticon.com/512/581/581601.png";
+        localStorage.setItem("theme", "light");
+    }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    const icon = document.getElementById("themeIcon");
+
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        icon.src = "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+    }
+}
+
+/* =========================
+   LOAD WEB
+========================= */
+window.addEventListener("load", async () => {
+    loadTheme();
+    await countVisit();
+    await loadStats();
+});
+</script>
 </body>
 </html>
