@@ -63,7 +63,7 @@ app.post("/ask", async (req, res) => {
 
         if (!response.ok) {
             console.error("Gemini API error:", data);
-            return res.status(500).json({ reply: "AI đang bận 😢" });
+            return res.status(500).json({ reply: JSON.stringify(data) });
         }
 
         const reply =

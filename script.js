@@ -13,19 +13,40 @@ const knowledge = {
     ]
 };
 
+// ================= HIỆU ỨNG GÕ CHỮ =================
+function typeEffect(element, text, speed = 25) {
+    element.innerHTML = "";
+    let i = 0;
+
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+
+    typing();
+}
+
+// ================= GỬI TIN NHẮN =================
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const chatBox = document.getElementById("chatBox");
-    const text = input.value;
+    const text = input.value.trim();
 
     if (!text) return;
 
-    // Hiện tin nhắn người dùng
+    // Tin nhắn người dùng
     chatBox.innerHTML += `<p><b>Bạn:</b> ${text}</p>`;
     input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Loading
-    chatBox.innerHTML += `<p id="loading"><b>AI:</b> Đang suy nghĩ...</p>`;
+    // Hiện AI đang gõ
+    const loading = document.createElement("p");
+    loading.id = "loading";
+    loading.innerHTML = "<b>AI:</b> Đang suy nghĩ...";
+    chatBox.appendChild(loading);
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
@@ -37,13 +58,25 @@ async function sendMessage() {
 
         const data = await res.json();
 
-        document.getElementById("loading").remove();
+        // Xóa loading
+        loading.remove();
 
-        chatBox.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+        // Tạo dòng AI mới
+        const aiMessage = document.createElement("p");
+        aiMessage.innerHTML = "<b>AI:</b> ";
+        chatBox.appendChild(aiMessage);
+
+        const span = document.createElement("span");
+        aiMessage.appendChild(span);
+
+        // Hiệu ứng gõ chữ
+        typeEffect(span, data.reply, 20);
+
         chatBox.scrollTop = chatBox.scrollHeight;
 
     } catch (error) {
-        document.getElementById("loading").remove();
+        loading.remove();
         chatBox.innerHTML += `<p><b>AI:</b> Lỗi kết nối server 😢</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 }
