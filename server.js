@@ -29,7 +29,7 @@ app.post("/ask", async (req, res) => {
         if (!userMessage) return res.status(400).json({ reply: "Bạn chưa nhập nội dung." });
 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
