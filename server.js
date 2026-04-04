@@ -47,7 +47,7 @@ app.post("/ask", async (req, res) => {
 });
 
 // 4. ĐẾM LƯỢT TRUY CẬP (SANG SUPABASE)
-aapp.post("/visit", async (req, res) => {
+app.post("/visit", async (req, res) => {
     let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
 
