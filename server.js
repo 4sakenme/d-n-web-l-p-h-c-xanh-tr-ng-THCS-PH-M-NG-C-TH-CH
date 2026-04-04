@@ -1,5 +1,5 @@
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const mysql = require("mysql2"); // Đổi từ sqlite3 sang mysql2
 const cors = require("cors");
 const path = require("path");
 const fetch = require("node-fetch");
@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.set("trust proxy", true);
 
-// 2. CẤU HÌNH CORS (Đã cập nhật link truonghocxanh.zya.me)
+// 2. CẤU HÌNH CORS
 app.use(cors({
     origin: [
         'http://truonghocxanh.zya.me',
@@ -23,16 +23,24 @@ app.use(cors({
     credentials: true
 }));
 
-// 3. KẾT NỐI DATABASE SQLITE
-const dbPath = path.resolve(__dirname, "data.db");
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) console.error("Lỗi kết nối DB:", err.message);
-    else console.log("Đã kết nối Database SQLite.");
+// 3. KẾT NỐI DATABASE MYSQL (AEONFREE)
+const db = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS visitors (id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT UNIQUE, time TEXT)`);
-    db.run(`CREATE TABLE IF NOT EXISTS ideas (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, idea TEXT, date TEXT)`);
+// Kiểm tra kết nối và tạo bảng nếu chưa có
+db.query(`CREATE TABLE IF NOT EXISTS visitors (id INT AUTO_INCREMENT PRIMARY KEY, ip VARCHAR(255) UNIQUE, time VARCHAR(255))`, (err) => {
+    if (err) console.error("Lỗi tạo bảng visitors:", err.message);
+});
+db.query(`CREATE TABLE IF NOT EXISTS ideas (id INT AUTO_INCREMENT PRIMARY KEY, name TEXT, idea TEXT, date VARCHAR(255))`, (err) => {
+    if (err) console.error("Lỗi tạo bảng ideas:", err.message);
 });
 
 // 4. PHỤC VỤ FILE TĨNH
@@ -44,7 +52,7 @@ app.get("/", (req, res) => {
 
 /* ================= ROUTES XỬ LÝ ================= */
 
-// API GEMINI AI (GIỮ NGUYÊN MODEL 2.5 FLASH CỦA BẠN)
+// API GEMINI AI (GIỮ NGUYÊN MODEL 2.5 FLASH)
 app.post("/ask", async (req, res) => {
     try {
         const userMessage = req.body.message;
@@ -65,8 +73,6 @@ app.post("/ask", async (req, res) => {
         );
 
         const data = await response.json();
-
-        // Kiểm tra lỗi từ Google API (nếu có)
         if (data.error) {
             console.error("Gemini API Error:", data.error);
             return res.json({ reply: "AI đang gặp lỗi kỹ thuật, thử lại sau nhé!" });
@@ -89,11 +95,11 @@ app.post("/visit", (req, res) => {
 
     const time = new Date().toISOString();
 
-    db.get("SELECT * FROM visitors WHERE ip = ?", [ip], (err, row) => {
+    db.query("SELECT * FROM visitors WHERE ip = ?", [ip], (err, results) => {
         if (err) return res.status(500).json({ error: "Lỗi DB" });
-        if (row) return res.json({ message: "IP đã tồn tại" });
+        if (results.length > 0) return res.json({ message: "IP đã tồn tại" });
 
-        db.run("INSERT INTO visitors (ip, time) VALUES (?, ?)", [ip, time], (err) => {
+        db.query("INSERT INTO visitors (ip, time) VALUES (?, ?)", [ip, time], (err) => {
             if (err) return res.status(500).json({ error: "Lỗi lưu IP" });
             res.json({ message: "Lượt truy cập mới" });
         });
@@ -102,9 +108,9 @@ app.post("/visit", (req, res) => {
 
 // LẤY TỔNG SỐ LƯỢT TRUY CẬP
 app.get("/count", (req, res) => {
-    db.get("SELECT COUNT(*) as total FROM visitors", (err, row) => {
+    db.query("SELECT COUNT(*) as total FROM visitors", (err, results) => {
         if (err) return res.status(500).json({ error: "Lỗi đếm" });
-        res.json(row);
+        res.json({ total: results[0].total });
     });
 });
 
@@ -115,7 +121,7 @@ app.post("/add-idea", (req, res) => {
 
     if (!name || !idea) return res.status(400).json({ error: "Thiếu thông tin" });
 
-    db.run("INSERT INTO ideas (name, idea, date) VALUES (?, ?, ?)", [name, idea, date], (err) => {
+    db.query("INSERT INTO ideas (name, idea, date) VALUES (?, ?, ?)", [name, idea, date], (err) => {
         if (err) return res.status(500).json({ error: "Lỗi lưu dữ liệu" });
         res.json({ message: "Đã lưu thành công!" });
     });
@@ -123,14 +129,14 @@ app.post("/add-idea", (req, res) => {
 
 // LẤY DANH SÁCH Ý TƯỞNG
 app.get("/ideas", (req, res) => {
-    db.all("SELECT * FROM ideas ORDER BY id DESC", (err, rows) => {
+    db.query("SELECT * FROM ideas ORDER BY id DESC", (err, results) => {
         if (err) return res.status(500).json({ error: "Lỗi lấy dữ liệu" });
-        res.json(rows);
+        res.json(results);
     });
 });
 
 /* ================= START SERVER ================= */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server đang chạy tại port: ${PORT}`);
+    console.log(`🚀 Server MySQL đang chạy tại port: ${PORT}`);
 });
