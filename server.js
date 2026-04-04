@@ -9,12 +9,16 @@ const app = express();
 
 // 1. CẤU HÌNH MIDDLEWARE
 app.use(express.json());
-app.set("trust proxy", true); // Quan trọng khi deploy Render/Railway
+app.set("trust proxy", true);
 
-// 2. CẤU HÌNH CORS (Sửa link Aeonfree của bạn vào đây)
+// 2. CẤU HÌNH CORS (Đã cập nhật link truonghocxanh.zya.me)
 app.use(cors({
-    origin: ['https://tên-miền-của-bạn.aeonfree.com', 'http://127.0.0.1:5500'], // Thêm link local để test nếu cần
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: [
+        'http://truonghocxanh.zya.me',
+        'https://truonghocxanh.zya.me',
+        'http://127.0.0.1:5500'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
@@ -26,7 +30,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
     else console.log("Đã kết nối Database SQLite.");
 });
 
-// Khởi tạo bảng nếu chưa có
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS visitors (id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT UNIQUE, time TEXT)`);
     db.run(`CREATE TABLE IF NOT EXISTS ideas (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, idea TEXT, date TEXT)`);
@@ -41,7 +44,7 @@ app.get("/", (req, res) => {
 
 /* ================= ROUTES XỬ LÝ ================= */
 
-// API GEMINI AI
+// API GEMINI AI (GIỮ NGUYÊN MODEL 2.5 FLASH CỦA BẠN)
 app.post("/ask", async (req, res) => {
     try {
         const userMessage = req.body.message;
@@ -62,6 +65,13 @@ app.post("/ask", async (req, res) => {
         );
 
         const data = await response.json();
+
+        // Kiểm tra lỗi từ Google API (nếu có)
+        if (data.error) {
+            console.error("Gemini API Error:", data.error);
+            return res.json({ reply: "AI đang gặp lỗi kỹ thuật, thử lại sau nhé!" });
+        }
+
         const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "AI đang bận, thử lại sau nhé 😅";
         res.json({ reply });
 
@@ -122,5 +132,5 @@ app.get("/ideas", (req, res) => {
 /* ================= START SERVER ================= */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server đang chạy tại: http://localhost:${PORT}`);
+    console.log(`🚀 Server đang chạy tại port: ${PORT}`);
 });
