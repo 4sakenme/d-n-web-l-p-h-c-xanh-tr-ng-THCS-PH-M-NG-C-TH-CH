@@ -16,10 +16,10 @@ app.set("trust proxy", true); // QUAN TRỌNG khi deploy
 const dbPath = path.resolve(__dirname, "data.db");
 const db = new sqlite3.Database(dbPath);
 
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "index.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 /* ================= GEMINI API ================= */

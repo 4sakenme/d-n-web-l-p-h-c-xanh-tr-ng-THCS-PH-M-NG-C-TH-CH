@@ -50,7 +50,7 @@ async function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-        const res = await fetch("http://localhost:3000/ask", {
+        const res = await fetch("https://lop-hoc-xanh.onrender.com/ask", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text })
