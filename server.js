@@ -47,23 +47,28 @@ app.post("/ask", async (req, res) => {
 });
 
 // 4. ĐẾM LƯỢT TRUY CẬP (SANG SUPABASE)
-app.post("/visit", async (req, res) => {
+aapp.post("/visit", async (req, res) => {
     let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    const { data, error } = await supabase
-    .from('visitors')
+    if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
+
+    const { error } = await supabase
+    .from('visit') // Đổi từ 'visitors' thành 'visit' cho khớp với ảnh Supabase của bạn
     .upsert({ ip: ip, time: new Date().toISOString() }, { onConflict: 'ip' });
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.json({ message: "Đã cập nhật lượt truy cập" });
+    if (error) {
+        console.error("Lỗi Supabase:", error.message);
+        return res.status(500).json({ error: error.message });
+    }
+    res.json({ message: "Đã cập nhật" });
 });
 
 app.get("/count", async (req, res) => {
     const { count, error } = await supabase
-    .from('visitors')
+    .from('visit') // Đổi ở đây luôn nhé
     .select('*', { count: 'exact', head: true });
 
     if (error) return res.status(500).json({ error: error.message });
-    res.json({ total: count });
+    res.json({ total: count || 0 });
 });
 
 // 5. LƯU Ý TƯỞNG (SANG SUPABASE)
