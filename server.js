@@ -8,7 +8,20 @@ require("dotenv").config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Cấu hình CORS
+app.use(cors({
+    origin: 'http://tên-miền-của-bạn.aeonfree.com', // Thay bằng URL thật của bạn trên Aeonfree
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // Cho phép gửi cookie/session nếu cần
+}));
+
+app.use(express.json());
+// ... các route khác của bạn
 app.set("trust proxy", true); // QUAN TRỌNG khi deploy
 
 
