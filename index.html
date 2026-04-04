@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lớp học xanh</title>
+    <title>Trường học xanh</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,7 @@
 
     <!-- Header -->
     <header>
-        <h1><i class="fas fa-leaf"></i> Lớp học Xanh</h1>
+        <h1><i class="fas fa-leaf"></i> Trường học Xanh</h1>
         <p>Sống Xanh mỗi ngày - Hành động nhỏ, Ý nghĩa lớn</p>
     </header>
 
@@ -43,7 +43,6 @@
             <ul class="menu" id="dropdownMenu">
                 <li><a href="#phanloai"><i class="fas fa-recycle"></i> Phân loại rác</a></li>
                 <li><a href="#nhua"><i class="fas fa-wine-bottle"></i> Giảm nhựa</a></li>
-                <li><a href="#theodoi"><i class="fas fa-chart-line"></i> Theo dõi</a></li>
                 <li><a href="#khaosat"><i class="fas fa-clipboard-check"></i> Khảo sát</a></li>
                 <li><a href="#gopy"><i class="fas fa-lightbulb"></i> Góp ý</a></li>
                 <li><a href="#ai"><i class="fas fa-robot"></i> Trợ lý AI</a></li>
@@ -54,18 +53,25 @@
     <!-- Main Content -->
     <main>
         <!-- Auth Section -->
-        <section id="auth">
-            <h2><i class="fas fa-user-lock"></i> Đăng nhập</h2>
-            <div class="auth-section">
-                <button id="googleLogin" class="btn btn-primary">
-                    <i class="fab fa-google"></i> Đăng nhập với Google
-                </button>
-                <button id="logoutBtn" class="btn btn-secondary" style="display:none;">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                </button>
-            </div>
-            <p id="userInfo"></p>
-        </section>
+    <section id="auth">
+        <h2><i class="fas fa-user-lock"></i> Tài khoản</h2>
+        <div class="auth-section">
+            <!-- Nút đăng nhập Google hiện có -->
+            <button id="googleLogin" class="btn btn-primary">
+                <i class="fab fa-google"></i> Đăng nhập với Google
+            </button>
+
+            <!-- NÚT ĐĂNG KÝ MỚI THÊM VÀO -->
+            <a href="URL_TRANG_DANG_KY_CUA_BAN" class="btn btn-register">
+            <i class="fas fa-user-plus"></i> Đăng ký tài khoản mới
+            </a>
+
+            <button id="logoutBtn" class="btn btn-secondary" style="display:none;">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </button>
+        </div>
+        <p id="userInfo"></p>
+    </section>
 
         <!-- Waste Classification -->
         <section id="phanloai">
@@ -122,13 +128,6 @@
             </ul>
         </section>
 
-        <!-- Tracking -->
-        <section id="theodoi">
-            <h2><i class="fas fa-chart-line"></i> Theo dõi điện & nước lớp học</h2>
-            <p>Dữ liệu tiêu thụ điện và nước theo thờI gian thực từ Google Sheets:</p>
-            <iframe height="400"
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRJ7nU.../pubchart?oid=1234567890&amp;format=interactive"></iframe>
-        </section>
 
         <!-- Survey -->
         <section id="khaosat">
@@ -209,7 +208,7 @@
     <!-- Footer -->
     <footer>
         <p><i class="fas fa-heart"></i> &copy; 2025 Lớp học Xanh | Thiết kế bởi học sinh trường THCS Phạm Ngọc Thạch
-            "NVL"! & DD</p>
+            "TP"! & DD</p>
     </footer>
 
     <!-- Scripts -->
