@@ -13,7 +13,7 @@ const knowledge = {
     ]
 };
 
-// ================= HIỆU ỨNG GÕ CHỮ =================
+// type effect
 function typeEffect(element, text, speed = 25) {
     element.innerHTML = "";
     let i = 0;
@@ -29,7 +29,7 @@ function typeEffect(element, text, speed = 25) {
     typing();
 }
 
-// ================= GỬI TIN NHẮN =================
+// sendMessage
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const chatBox = document.getElementById("chatBox");
@@ -37,12 +37,11 @@ async function sendMessage() {
 
     if (!text) return;
 
-    // Tin nhắn người dùng
+    // usermess
     chatBox.innerHTML += `<p><b>Bạn:</b> ${text}</p>`;
     input.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Hiện AI đang gõ
     const loading = document.createElement("p");
     loading.id = "loading";
     loading.innerHTML = "<b>AI:</b> Đang suy nghĩ...";
@@ -58,10 +57,10 @@ async function sendMessage() {
 
         const data = await res.json();
 
-        // Xóa loading
+
         loading.remove();
 
-        // Tạo dòng AI mới
+
         const aiMessage = document.createElement("p");
         aiMessage.innerHTML = "<b>AI:</b> ";
         chatBox.appendChild(aiMessage);
@@ -69,7 +68,7 @@ async function sendMessage() {
         const span = document.createElement("span");
         aiMessage.appendChild(span);
 
-        // Hiệu ứng gõ chữ
+
         typeEffect(span, data.reply, 20);
 
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -82,7 +81,7 @@ async function sendMessage() {
 }
 
 
-// new
+
 
 const API_URL = "https://script.google.com/macros/s/AKfycbzkRet7cKrKXjFJ7SPv4lUgbVC7hl8WyveEtYGkGKVDPwt3lvBCRfEss9qAaXg3IquajQ/exec";
 
@@ -109,9 +108,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     });
 });
 
-/* =========================
-   GỬI Ý TƯỞNG (FIX CHECKBOX)
-========================= */
+
 async function submitIdea(event) {
     event.preventDefault();
 
@@ -182,9 +179,7 @@ function renderTable() {
     });
 }
 
-/* =========================
-   CHART
-========================= */
+
 let chart;
 
 function renderChart() {

@@ -6,12 +6,12 @@ require("dotenv").config();
 
 const app = express();
 
-// 1. CẤU HÌNH SUPABASE
+// config
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// 2. MIDDLEWARE & CORS
+// id url
 app.use(express.json());
 app.set("trust proxy", true);
 app.use(cors({
@@ -21,7 +21,7 @@ app.use(cors({
     credentials: true
 }));
 
-// 3. API GEMINI AI (GIỮ NGUYÊN MODEL 2.5 FLASH CỦA BẠN)
+// apigemini
 app.post("/ask", async (req, res) => {
     try {
         const userMessage = req.body.message;
@@ -34,19 +34,19 @@ app.post("/ask", async (req, res) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Bạn là Trợ lý Lớp Học Xanh. Trả lời đầy đủ thân thiện. Câu hỏi: ${userMessage}` }] }]
+                    contents: [{ parts: [{ text: `Bạn là Trợ lý Trường Học . Trả lời đầy đủ thân thiện. Câu hỏi: ${userMessage}` }] }]
                 })
             }
         );
         const data = await response.json();
         const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "AI đang suy nghĩ...";
         res.json({ reply });
-    } catch (err) {
+    } catch (err) {Xanh
         res.status(500).json({ reply: "Lỗi kết nối AI 😢" });
     }
 });
 
-// 4. ĐẾM LƯỢT TRUY CẬP (SANG SUPABASE)
+// counter supabase
 app.post("/visit", async (req, res) => {
     let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
@@ -71,7 +71,7 @@ app.get("/count", async (req, res) => {
     res.json({ total: count || 0 });
 });
 
-// 5. LƯU Ý TƯỞNG (SANG SUPABASE)
+// save ideas
 app.post("/add-idea", async (req, res) => {
     const { name, idea } = req.body;
     const { error } = await supabase
