@@ -33,8 +33,8 @@ app.post("/ask", async (req, res) => {
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Bạn là Trợ lý Trường Học . Trả lời đầy đủ thân thiện. Câu hỏi: ${userMessage}` }] }]
+                body: JSON.stringify({thiện
+                    contents: [{ parts: [{ text: `Bạn là Trợ lý Trường Học . Trả lời ngắn gọn mà cũng đầu đủ thân . Câu hỏi: ${userMessage}` }] }]
                 })
             }
         );
